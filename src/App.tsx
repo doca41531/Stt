@@ -74,7 +74,6 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
 
       const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
       const url = URL.createObjectURL(audioBlob);
-      setAudioUrl(url);
 
       const formData = new FormData();
       formData.append('file', audioBlob, 'recording.webm');
