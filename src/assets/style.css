@@ -1,12 +1,4 @@
 @import url(https://fonts.googleapis.com/css?family=Fjalla+One);
-.p-4{
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 7rem;
-}
 @-webkit-keyframes to_24 {
     4.1666666667% {
         content: "01";
@@ -2306,6 +2298,14 @@
         height: 64px;
         margin: -32px -32px;
     }
+}
+.p-4{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 7rem;
 }
 .recorder-container {
     position: relative;

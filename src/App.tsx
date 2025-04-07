@@ -82,8 +82,8 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
           method: 'POST',
           body: formData,
         });
-        const result = await response.json(); // 👈 여기서 STT 결과 받기
-        setSttText(result.transcript); // 👈 useState로 화면에 표시
+        const result = await response.json();
+        setSttText(result.transcript);
 
       } catch (err) {
         console.error('업로드 오류:', err);
@@ -128,11 +128,10 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
       <div className="s_ms"></div>
     </div>
   </div>
-      {SttText && (
-        <div className="mt-4 p-4 bg-gray-100 rounded">
-          <p className="font-mono text-sm">{SttText}</p>
+      
+        <div className="mt-4 bg-gray-100 rounded">
+          <p className="font-mono text-sm">stt : {SttText && (SttText)}</p>
         </div>
-      )}
     </div>
 
     
