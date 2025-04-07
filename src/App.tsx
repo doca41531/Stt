@@ -37,8 +37,7 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
         const barHeight = dataArray[i];
         ctx.fillStyle = `rgb(${barHeight + 100},50,150)`;
         ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
-        x += barWidth + 1;
-        console.log(x);        
+        x += barWidth + 1;  
       }
 
       animationRef.current = requestAnimationFrame(draw);
