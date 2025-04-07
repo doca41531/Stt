@@ -133,7 +133,6 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
   </div>
       {SttText && (
         <div className="mt-4 p-4 bg-gray-100 rounded">
-          <p>📝 변환된 텍스트:</p>
           <p className="font-mono text-sm">{SttText}</p>
         </div>
       )}
