@@ -86,7 +86,6 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
           body: formData,
         });
         const result = await response.json(); // 👈 여기서 STT 결과 받기
-        console.log('STT 결과:', result.transcript);
         setSttText(result.transcript); // 👈 useState로 화면에 표시
 
       } catch (err) {
@@ -132,13 +131,6 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
       <div className="s_ms"></div>
     </div>
   </div>
-
-      
-      {audioUrl && (
-        <div className="mt-4">
-          <audio controls src={audioUrl} />
-        </div>
-      )}
       {SttText && (
         <div className="mt-4 p-4 bg-gray-100 rounded">
           <p>📝 변환된 텍스트:</p>
