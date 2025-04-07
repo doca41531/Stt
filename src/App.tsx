@@ -82,7 +82,7 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
       formData.append('file', audioBlob, 'recording.webm');
 
       try {
-        const response = await fetch('http://localhost:2839/stt/upload', {
+        const response = await fetch('https://sttback.onrender.com/stt/upload', {
           method: 'POST',
           body: formData,
         });
