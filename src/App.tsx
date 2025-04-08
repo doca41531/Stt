@@ -36,7 +36,7 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
         const barHeight = dataArray[i];
         ctx.fillStyle = `rgb(${barHeight + 100},50,150)`;
         ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
-        x += barWidth + 1;  
+        x += barWidth + 1;
       }
 
       animationRef.current = requestAnimationFrame(draw);
@@ -45,52 +45,10 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
     draw();
   };
 
-  const startRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorderRef.current = mediaRecorder;
+  const startRecording = () => {
+    if (!mediaRecorderRef.current) return;
     audioChunksRef.current = [];
-
-    const audioContext = new AudioContext();
-    audioContextRef.current = audioContext;
-
-    const source = audioContext.createMediaStreamSource(stream);
-    const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 256;
-    analyserRef.current = analyser;
-
-    source.connect(analyser);
-    drawVisualizer(analyser);
-
-    mediaRecorder.ondataavailable = (event) => {
-      audioChunksRef.current.push(event.data);
-    };
-
-    mediaRecorder.onstop = async () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      audioContext.close();
-
-      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-
-      const formData = new FormData();
-      formData.append('file', audioBlob, 'recording.webm');
-
-      try {
-        const response = await fetch('https://sttback.onrender.com/stt/upload', {
-          method: 'POST',
-          body: formData,
-        });
-        const result = await response.json();
-        setSttText(result.transcript);
-
-      } catch (err) {
-        console.error('업로드 오류:', err);
-      }
-    };
-
-    mediaRecorder.start();
+    mediaRecorderRef.current.start();
     setIsRecording(true);
   };
 
@@ -100,6 +58,56 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
   };
 
   useEffect(() => {
+    const initAudioVisualizer = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        const audioContext = new AudioContext();
+        audioContextRef.current = audioContext;
+
+        const source = audioContext.createMediaStreamSource(stream);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        analyserRef.current = analyser;
+
+        source.connect(analyser);
+        drawVisualizer(analyser);
+
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+
+        mediaRecorder.ondataavailable = (event) => {
+          audioChunksRef.current.push(event.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+          if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+          }
+          audioContext.close();
+
+          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+          const formData = new FormData();
+          formData.append('file', audioBlob, 'recording.webm');
+
+          try {
+            const response = await fetch('https://sttback.onrender.com/stt/upload', {
+              method: 'POST',
+              body: formData,
+            });
+            const result = await response.json();
+            setSttText(result.transcript);
+          } catch (err) {
+            console.error('업로드 오류:', err);
+          }
+        };
+      } catch (err) {
+        console.error('마이크 접근 실패:', err);
+      }
+    };
+
+    initAudioVisualizer();
+
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -110,31 +118,28 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
 
   return (
     <div className="p-4">
-
       <canvas ref={canvasRef} width={600} height={150} className="mb-4 border rounded bg-black" />
 
       <div className="recorder-container">
-    <input
-      type="checkbox"
-      id="btn"
-      checked={isRecording}
-      onChange={() => {
-        isRecording ? stopRecording() : startRecording();
-      }}
-    />
-    <label htmlFor="btn"></label>
-    <div className="time">
-      <div className="h_m"></div>
-      <div className="s_ms"></div>
-    </div>
-  </div>
-      
-        <div className="mt-4 bg-gray-100 rounded">
-          <p className="font-mono text-sm">stt : {SttText && (SttText)}</p>
+        <input
+          type="checkbox"
+          id="btn"
+          checked={isRecording}
+          onChange={() => {
+            isRecording ? stopRecording() : startRecording();
+          }}
+        />
+        <label htmlFor="btn"></label>
+        <div className="time">
+          <div className="h_m"></div>
+          <div className="s_ms"></div>
         </div>
-    </div>
+      </div>
 
-    
+      <div className="mt-4 bg-gray-100 rounded">
+        <p className="font-mono text-sm">stt : {SttText && SttText}</p>
+      </div>
+    </div>
   );
 };
 
