@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import './assets/style.css';
 
 const VoiceRecorderWithVisualizer: React.FC = () => {
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
   const animationRef = useRef<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [SttText, setSttText] = useState<string | null>(null);
 
