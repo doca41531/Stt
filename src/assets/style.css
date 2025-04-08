@@ -2300,12 +2300,16 @@
     }
 }
 .p-4{
-    height: 100vh;
+    height: 95vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 7rem;
+}
+.text-sm{
+    font-size: 25px;
+    font-weight: bold;
 }
 .recorder-container {
     position: relative;
