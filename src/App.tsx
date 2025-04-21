@@ -7,7 +7,7 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [SttText, setSttText] = useState<string | null>(null);
+  const [SttText, setSttText] = useState<string | null>("버튼을 누르고 말한 뒤 다시 버튼을 눌러주세요");
 
   const audioChunksRef = useRef<Blob[]>([]);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -53,6 +53,7 @@ const VoiceRecorderWithVisualizer: React.FC = () => {
   };
 
   const stopRecording = () => {
+    setSttText("응답이 오는데 조금 걸릴 수 있습니다.")
     mediaRecorderRef.current?.stop();
     setIsRecording(false);
   };
